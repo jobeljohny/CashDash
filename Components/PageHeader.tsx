@@ -1,14 +1,25 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
 import React from "react";
 
-export default function PageHeader({ text, image }) {
+interface PageHeaderProps {
+  text: string;
+  image: ImageSourcePropType;
+}
+
+export const PageHeader: React.FC<PageHeaderProps> = ({ text, image }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.icon} source={image} />
       <Text style={styles.title}>{text}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -31,3 +42,5 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
+
+export default PageHeader;

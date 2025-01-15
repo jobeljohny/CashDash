@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "./Screens/HomeScreen";
+import { StyleSheet } from "react-native";
 import AddPayment from "./Screens/AddPayment";
 
 export default function App() {

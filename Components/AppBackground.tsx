@@ -2,7 +2,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Platform, StatusBar, View } from "react-native";
 
-export default function AppBackground({ children }) {
+export default function AppBackground({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const statusBarHeight =
     Platform.OS === "ios" ? 0 : StatusBar.currentHeight || 0;
   return (

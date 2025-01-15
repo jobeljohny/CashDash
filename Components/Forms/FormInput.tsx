@@ -13,16 +13,11 @@ type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 interface Props extends TextInputProps {
   icon?: IconName;
-  width?: string | number;
 }
 
-const FormInput: React.FC<Props> = ({
-  icon,
-  width = "100%",
-  ...otherProps
-}) => {
+const FormInput: React.FC<Props> = ({ icon, ...otherProps }) => {
   return (
-    <View style={[styles.container, { width: width as ViewStyle["width"] }]}>
+    <View style={[styles.container]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
@@ -45,8 +40,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(206, 201, 255, 0.08)",
     borderRadius: 10,
     flexDirection: "row",
-    alignItems: "baseline",
-    padding: 4,
+    alignItems: "center",
+    paddingHorizontal: 2,
+    height: 50,
   },
   icon: {
     marginRight: 10,

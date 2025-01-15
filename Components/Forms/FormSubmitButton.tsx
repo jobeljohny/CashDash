@@ -1,11 +1,13 @@
 import { useFormikContext } from "formik";
-import React, { FormEvent } from "react";
+import React from "react";
 import {
-  Button,
-  GestureResponderEvent,
   NativeSyntheticEvent,
   NativeTouchEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
 } from "react-native";
+import Colors from "../../Config/Colors";
 
 interface Props {
   title: string;
@@ -14,15 +16,32 @@ interface Props {
 const FormSubmitButton: React.FC<Props> = ({ title }) => {
   const { handleSubmit } = useFormikContext();
   return (
-    <Button
-      title={title}
+    <TouchableOpacity
+      style={styles.buttonStyle}
       onPress={
         handleSubmit as unknown as (
           ev: NativeSyntheticEvent<NativeTouchEvent>
         ) => void
       }
-    ></Button>
+    >
+      <Text style={styles.title}>{title}</Text>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    backgroundColor: Colors.appPrimary,
+    borderRadius: 6,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+});
 
 export default FormSubmitButton;
