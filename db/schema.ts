@@ -1,9 +1,8 @@
-
-import { sqliteTable, text, integer,numeric } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const expenses = sqliteTable('expenses', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  amount: numeric('amount').notNull(),
+  amount: integer('amount').notNull(),
   date: text('').notNull(),
   transactionType: text('transactionType').notNull(),
   category: text('category').notNull(),
@@ -11,7 +10,4 @@ export const expenses = sqliteTable('expenses', {
   
 });
 
-
-
-// Export Task to use as an interface in your app
-export type Task = typeof expenses.$inferSelect;
+export type PaymentRecord = typeof expenses.$inferSelect;
