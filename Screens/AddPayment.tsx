@@ -12,8 +12,9 @@ export default function AddPayment() {
         image={require("../Assets/icons/card.png")}
       />
       <PaymentInfoForm
-        onSubmit={() => {
+        onSubmit={(values) => {
           console.log("submit logic here");
+          console.log(values);
         }}
       />
     </AppBackground>

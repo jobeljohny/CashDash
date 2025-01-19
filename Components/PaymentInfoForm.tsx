@@ -5,6 +5,7 @@ import { AddPaymentValidationSchema } from "../Schemas/addPaymentValidationSchem
 import { StyleSheet, View } from "react-native";
 import { AppFormField, FormPicker, FormSubmitButton } from "./Forms";
 import { IPaymentInfo } from "../Interfaces/payment";
+import FormDatePicker from "./Forms/FormDatePicker";
 
 interface Props {
   onSubmit: (info: IPaymentInfo) => void;
@@ -18,13 +19,13 @@ const PaymentInfoForm: React.FC<Props> = ({ onSubmit }) => {
         amount: 0,
         date: new Date(),
         transactionType: paymentModes[0],
-        category: "Food",
+        category: category[0],
         merchant: "",
       }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={AddPaymentValidationSchema}
     >
-      {() => (
+      {({ values }) => (
         <>
           <View style={styles.formContainer}>
             <View style={styles.dualField}>
@@ -58,11 +59,10 @@ const PaymentInfoForm: React.FC<Props> = ({ onSubmit }) => {
                 />
               </View>
               <View style={styles.fieldContainer}>
-                <AppFormField
-                  name="date"
+                <FormDatePicker
                   icon="calendar"
                   floatingLabel="Date"
-                  placeholder="Date"
+                  date={values.date}
                   changeVariable="date"
                 />
               </View>

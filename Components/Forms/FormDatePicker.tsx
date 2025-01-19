@@ -4,20 +4,21 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import PickerInput from "./PickerInput";
 import Colors from "../../Config/Colors";
+import DateInput from "./DateInput";
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 interface Props {
-  items: string[];
   icon: IconName;
   changeVariable: string;
   floatingLabel: string;
+  date: Date;
 }
 
-const FormPicker: React.FC<Props> = ({
-  items,
+const FormDatePicker: React.FC<Props> = ({
   icon,
   floatingLabel,
+  date,
   changeVariable,
 }) => {
   const { setFieldValue } = useFormikContext();
@@ -25,10 +26,10 @@ const FormPicker: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{floatingLabel}</Text>
-      <PickerInput
+      <DateInput
         icon={icon}
-        items={items}
-        onValueChange={(value) => setFieldValue(changeVariable, value)}
+        date={date}
+        onChange={(_, date) => setFieldValue(changeVariable, date)}
       />
     </View>
   );
@@ -46,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormPicker;
+export default FormDatePicker;
