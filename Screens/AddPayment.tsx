@@ -3,7 +3,6 @@ import AppBackground from "../Components/AppBackground";
 import PageHeader from "../Components/PageHeader";
 import PaymentInfoForm from "../Components/PaymentInfoForm";
 import { IPaymentInfo } from "../Interfaces/payment";
-import { createTable, saveExpense } from "../Services/DbManager";
 
 export default function AddPayment() {
   const handleFormSubmit = async (values: IPaymentInfo) => {
