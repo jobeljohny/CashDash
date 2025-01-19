@@ -26,7 +26,7 @@ const DateInput: React.FC<Props> = ({
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
   ) => {
-    setShowPicker(false); // Close the picker when a date is selected
+    setShowPicker(false);
     if (selectedDate) {
       onChange(event, selectedDate);
     }
@@ -43,7 +43,7 @@ const DateInput: React.FC<Props> = ({
         color={Colors.appPrimary}
       />
       <Text style={styles.dateText} onPress={() => setShowPicker(true)}>
-        {formattedDate} {/* Display the selected date */}
+        {formattedDate}
       </Text>
       {showPicker && (
         <RNDateTimePicker
