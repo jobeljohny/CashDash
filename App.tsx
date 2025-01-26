@@ -1,24 +1,30 @@
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
 import React, { Suspense } from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
+import * as schema from "./db/schema";
 import AddPayment from "./Screens/AddPayment";
-import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import migrations from "./drizzle/migrations";
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import ViewPayments from "./Screens/ViewPayments";
 
 export const DATABASE_NAME = "cashdash";
 
-export default function App() {
+export const dbInstance = (() => {
   const expoDb = openDatabaseSync(DATABASE_NAME);
-  const db = drizzle(expoDb);
-  const { success, error } = useMigrations(db, migrations);
+  return drizzle<typeof schema>(expoDb, { schema });
+})();
 
+export default function App() {
+  useDrizzleStudio(dbInstance, {
+    enabled: __DEV__,
+  });
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
-        <AddPayment></AddPayment>
+        <ViewPayments></ViewPayments>
       </SQLiteProvider>
     </Suspense>
+    // <AddPayment></AddPayment>
     //<HomeScreen></HomeScreen>
   );
 }

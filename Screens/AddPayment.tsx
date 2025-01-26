@@ -1,20 +1,21 @@
 import React from "react";
+import { dbInstance } from "../App";
 import AppBackground from "../Components/AppBackground";
 import PageHeader from "../Components/PageHeader";
 import PaymentInfoForm from "../Components/PaymentInfoForm";
 import { IPaymentInfo } from "../Interfaces/payment";
-import { useSQLiteContext } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import * as schema from "../db/schema";
-import { addExpense } from "../Services/DbManager";
+import { addExpense, getAllRecords } from "../Services/DbManager";
 
 export default function AddPayment() {
-  const db = useSQLiteContext();
-  const drizzleDb = drizzle(db, { schema });
-
   const handleFormSubmit = async (values: IPaymentInfo) => {
-    addExpense(db[0], values);
+    try {
+      const record = await addExpense(dbInstance, values);
+      console.log("Expense recorded successfully:", record);
+    } catch (error) {
+      console.error("Error while adding expense:", error);
+    }
   };
+  getAllRecords(dbInstance);
 
   return (
     <AppBackground>
