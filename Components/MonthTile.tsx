@@ -1,17 +1,22 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import Colors from "../Config/Colors";
 
 interface Props {
   title: string;
+  selected: Boolean;
 }
 
-const MonthTile = ({ title }: Props) => {
+const MonthTile = ({ title, selected }: Props) => {
   return (
-    <TouchableOpacity>
-      <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-    </TouchableOpacity>
+    <View
+      style={[
+        styles.container,
+        selected && { backgroundColor: Colors.appPrimary },
+      ]}
+    >
+      <Text style={styles.title}>{title}</Text>
+    </View>
   );
 };
 
@@ -23,6 +28,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
+    fontWeight: "500",
   },
 });
 

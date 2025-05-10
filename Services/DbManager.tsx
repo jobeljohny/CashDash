@@ -2,6 +2,10 @@ import { ExpoSQLiteDatabase } from "drizzle-orm/expo-sqlite";
 import { AsyncStorage } from "expo-sqlite/kv-store";
 import { expenses } from "../db/schema";
 import { IPaymentInfo } from "../Interfaces/payment";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { openDatabaseSync } from "expo-sqlite";
+import * as schema from "../db/schema";
+import migrations from "../drizzle/migrations";
 
 type DBSchema = ExpoSQLiteDatabase<typeof import("../db/schema")>;
 
@@ -50,3 +54,34 @@ export const getAllRecords = async (db: DBSchema) => {
 };
 
 ///
+
+// Database name
+export const DATABASE_NAME = "cashdash";
+
+// Initialize and migrate database
+export const initializeDatabase = () => {
+  const expoDb = openDatabaseSync(DATABASE_NAME);
+
+  // Apply migrations - safely handling existing tables
+  try {
+    const migrationValues = Object.values(migrations.migrations);
+    migrationValues.forEach((migration) => {
+      try {
+        expoDb.execSync(migration);
+      } catch (error) {
+        // Ignore "table already exists" errors
+        if (!error.toString().includes("already exists")) {
+          console.error("Migration error:", error);
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Migration process error:", error);
+  }
+
+  // Return drizzle instance
+  return drizzle<typeof schema>(expoDb, { schema });
+};
+
+// Export db instance
+export const db = initializeDatabase();

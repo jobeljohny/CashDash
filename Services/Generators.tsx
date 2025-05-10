@@ -1,6 +1,7 @@
 export interface IMonthTile {
   month: Date;
   monthDisplay: string;
+  selected: boolean;
 }
 
 export function generateMonthList(): IMonthTile[] {
@@ -18,8 +19,8 @@ export function generateMonthList(): IMonthTile[] {
     }); // "Jan", "Feb", etc.
     const yearAbbreviation = date.getFullYear().toString().slice(-2);
     const monthDisplay = `${monthAbbreviation}'${yearAbbreviation}`;
-    monthList.push({ month: date, monthDisplay });
+    monthList.push({ month: date, monthDisplay, selected: false });
   }
-
+  monthList[0].selected = true;
   return monthList.reverse();
 }
