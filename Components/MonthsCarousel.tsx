@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+} from "react-native";
 import MonthTile from "./MonthTile";
 import { generateMonthList } from "../Services/Generators";
 
@@ -27,25 +33,34 @@ const MonthsCarousel = () => {
   };
 
   return (
-    <FlatList
-      ref={flatListRef}
-      style={{ margin: 10, backgroundColor: "red" }}
-      data={monthList}
-      renderItem={({ item, index }) => (
-        <TouchableOpacity onPress={() => onTileClick(index)}>
-          <MonthTile title={item.monthDisplay} selected={item.selected} />
-        </TouchableOpacity>
-      )}
-      keyExtractor={(item) => item.month.toString()}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 12 }}
-      onScrollToIndexFailed={(error) => {
-        console.warn("Scroll to index failed", error);
-        flatListRef.current?.scrollToEnd({ animated: true }); // Fallback to scroll to end
-      }}
-    />
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        data={monthList}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => onTileClick(index)}>
+            <MonthTile title={item.monthDisplay} selected={item.selected} />
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.month.toString()}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ gap: 12 }}
+        onScrollToIndexFailed={(error) => {
+          console.warn("Scroll to index failed", error);
+          flatListRef.current?.scrollToEnd({ animated: true }); // Fallback to scroll to end
+        }}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: 36,
+    marginVertical: 10,
+    marginHorizontal: 10,
+  },
+});
 
 export default MonthsCarousel;

@@ -24,7 +24,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "rgba(206, 201, 255, 0.08)",
     borderRadius: 6,
-    padding: 8,
+    paddingHorizontal: 12,
+    height: "100%",
+    justifyContent: "center",
   },
   title: {
     color: "white",
