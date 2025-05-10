@@ -1,10 +1,9 @@
 import React from "react";
-import { db } from "../Services/DbManager";
 import AppBackground from "../Components/AppBackground";
 import PageHeader from "../Components/PageHeader";
 import PaymentInfoForm from "../Components/PaymentInfoForm";
 import { IPaymentInfo } from "../Interfaces/payment";
-import { addExpense, getAllRecords } from "../Services/DbManager";
+import { addExpense, db } from "../Services/DbManager";
 
 export default function AddPayment() {
   const handleFormSubmit = async (values: IPaymentInfo) => {
@@ -15,7 +14,6 @@ export default function AddPayment() {
       console.error("Error while adding expense:", error);
     }
   };
-  getAllRecords(db);
 
   return (
     <AppBackground>

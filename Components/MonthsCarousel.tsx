@@ -29,7 +29,7 @@ const MonthsCarousel = () => {
   return (
     <FlatList
       ref={flatListRef}
-      style={{ margin: 10 }}
+      style={{ margin: 10, backgroundColor: "red" }}
       data={monthList}
       renderItem={({ item, index }) => (
         <TouchableOpacity onPress={() => onTileClick(index)}>
