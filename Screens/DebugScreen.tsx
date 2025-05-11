@@ -1,22 +1,31 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
   Alert,
+  FlatList,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { RootStackParamList } from "../App";
 import AppBackground from "../Components/AppBackground";
 import PageHeader from "../Components/PageHeader";
 import { db } from "../Services/DbManager";
 import { PaymentRecord, expenses } from "../db/schema";
-import { eq } from "drizzle-orm";
+
+// Create the type for navigation prop
+type DebugScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "DebugScreen"
+>;
 
 export default function DebugScreen() {
   const [expenseRecords, setExpenseRecords] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation<DebugScreenNavigationProp>();
 
   // Load expenses when component mounts
   useEffect(() => {
@@ -63,6 +72,11 @@ export default function DebugScreen() {
     );
   };
 
+  // Navigate to Add Payment screen with properly typed navigation
+  const navigateToAddPayment = () => {
+    navigation.navigate("AddPayment");
+  };
+
   // Format date string for display
   const formatDate = (dateString: string) => {
     try {
@@ -100,6 +114,13 @@ export default function DebugScreen() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={loadExpenses}>
             <Text style={styles.buttonText}>Refresh Data</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={navigateToAddPayment}
+          >
+            <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -172,7 +193,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2c6e49",
     padding: 12,
     borderRadius: 8,
-    minWidth: 150,
+    minWidth: 100,
     alignItems: "center",
   },
   dangerButton: {

@@ -53,6 +53,31 @@ export const getAllRecords = async (db: DBSchema) => {
   }
 };
 
+export const getExpensesByMonth = async (
+  db: DBSchema,
+  year: number,
+  month: number
+) => {
+  try {
+    // Create date range for the specified month
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0); // Last day of the month
+
+    const startDateStr = startDate.toISOString();
+    const endDateStr = endDate.toISOString();
+
+    const records = await db.query.expenses.findMany({
+      where: (expenses, { and, gte, lte }) =>
+        and(gte(expenses.date, startDateStr), lte(expenses.date, endDateStr)),
+    });
+
+    return records;
+  } catch (error) {
+    console.error("Failed to fetch expenses by month:", error);
+    throw error;
+  }
+};
+
 ///
 
 // Database name

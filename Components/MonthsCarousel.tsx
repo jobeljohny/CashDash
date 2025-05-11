@@ -9,7 +9,11 @@ import {
 import MonthTile from "./MonthTile";
 import { generateMonthList } from "../Services/Generators";
 
-const MonthsCarousel = () => {
+interface MonthsCarouselProps {
+  onMonthSelected?: (year: number, month: number) => void;
+}
+
+const MonthsCarousel = ({ onMonthSelected }: MonthsCarouselProps) => {
   const flatListRef = useRef<FlatList>(null);
   const [monthList, setMonthList] = useState(generateMonthList());
   const [selectedIndex, setSelectedIndex] = useState(monthList.length - 1);
@@ -21,6 +25,12 @@ const MonthsCarousel = () => {
         animated: true,
       });
     }, 100);
+
+    // Notify parent of initial selected month
+    if (onMonthSelected && monthList[selectedIndex]) {
+      const selectedDate = monthList[selectedIndex].month;
+      onMonthSelected(selectedDate.getFullYear(), selectedDate.getMonth());
+    }
   }, [monthList]);
 
   const onTileClick = (i: number) => {
@@ -30,6 +40,12 @@ const MonthsCarousel = () => {
     }));
     setSelectedIndex(i);
     setMonthList(updatedMonthList);
+
+    // Notify parent of selected month
+    if (onMonthSelected && updatedMonthList[i]) {
+      const selectedDate = updatedMonthList[i].month;
+      onMonthSelected(selectedDate.getFullYear(), selectedDate.getMonth());
+    }
   };
 
   return (
@@ -42,7 +58,9 @@ const MonthsCarousel = () => {
             <MonthTile title={item.monthDisplay} selected={item.selected} />
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.month.toString()}
+        keyExtractor={(item) =>
+          `${item.month.getFullYear()}-${item.month.getMonth()}`
+        }
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 12 }}
