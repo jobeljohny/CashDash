@@ -131,14 +131,11 @@ export default function SwipeableTile({ children, onDelete, onEdit }: Props) {
     "worklet";
     const currentX = event.translationX + initialTranslateX.value;
     const deleteButtonPosition = -itemWidth.value * OPTIONS_MENU_THRESHOLD;
-    const deleteThreshold = -itemWidth.value * 0.6; // Require more swipe to delete
 
     if (currentX > deleteButtonPosition / 2) {
       resetPosition();
-    } else if (currentX > deleteThreshold) {
-      snapToDeleteButton(deleteButtonPosition);
     } else {
-      deleteItem();
+      snapToDeleteButton(deleteButtonPosition);
     }
   };
 
@@ -234,7 +231,7 @@ const styles = StyleSheet.create({
   },
   optionButtons: {
     flexDirection: "row",
-    gap: 6,
+    gap: 10,
     alignItems: "center",
     height: "100%",
   },
