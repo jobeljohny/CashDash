@@ -1,3 +1,5 @@
+import "react-native-gesture-handler";
+
 import { SQLiteProvider } from "expo-sqlite";
 import React, { Suspense, useRef } from "react";
 import {
@@ -6,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as schema from "./db/schema";
 import AddPayment from "./Screens/AddPayment";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
@@ -39,40 +42,43 @@ export default function App() {
   });
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
-      <NavigationContainer ref={navigationRef}>
-        <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
-          <Stack.Navigator
-            id={undefined}
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="ViewPayments" component={ViewPayments} />
-            <Stack.Screen name="DebugScreen" component={DebugScreen} />
-            <Stack.Screen name="AddPayment" component={AddPayment} />
-          </Stack.Navigator>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Suspense fallback={<ActivityIndicator size="large" />}>
+        <NavigationContainer ref={navigationRef}>
+          <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
+            <Stack.Navigator
+              id={undefined}
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="ViewPayments" component={ViewPayments} />
+              <Stack.Screen name="DebugScreen" component={DebugScreen} />
+              <Stack.Screen name="AddPayment" component={AddPayment} />
+            </Stack.Navigator>
 
-          {/* Floating Debug Button */}
-          <TouchableOpacity
-            style={styles.debugButton}
-            onPress={() => {
-              const currentRoute =
-                navigationRef.current?.getCurrentRoute()?.name;
-              if (currentRoute === "DebugScreen") {
-                navigationRef.current?.navigate("ViewPayments");
-              } else {
-                navigationRef.current?.navigate("DebugScreen");
-              }
-            }}
-          >
-            <Text style={styles.debugButtonText}>
-              {navigationRef.current?.getCurrentRoute()?.name === "DebugScreen"
-                ? "Close"
-                : "Debug"}
-            </Text>
-          </TouchableOpacity>
-        </SQLiteProvider>
-      </NavigationContainer>
-    </Suspense>
+            {/* Floating Debug Button */}
+            <TouchableOpacity
+              style={styles.debugButton}
+              onPress={() => {
+                const currentRoute =
+                  navigationRef.current?.getCurrentRoute()?.name;
+                if (currentRoute === "DebugScreen") {
+                  navigationRef.current?.navigate("ViewPayments");
+                } else {
+                  navigationRef.current?.navigate("DebugScreen");
+                }
+              }}
+            >
+              <Text style={styles.debugButtonText}>
+                {navigationRef.current?.getCurrentRoute()?.name ===
+                "DebugScreen"
+                  ? "Close"
+                  : "Debug"}
+              </Text>
+            </TouchableOpacity>
+          </SQLiteProvider>
+        </NavigationContainer>
+      </Suspense>
+    </GestureHandlerRootView>
   );
 }
 

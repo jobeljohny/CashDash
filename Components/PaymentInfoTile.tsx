@@ -1,6 +1,7 @@
-import { Image, StyleSheet, View, Text } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { paymentCategoryMap } from "../Constants/paymentCategoryMap";
 import { IPaymentInfo } from "../Interfaces/payment";
+import SwipeableTile from "./SwipeableTile";
 
 interface Props {
   info: IPaymentInfo;
@@ -8,32 +9,44 @@ interface Props {
 
 export default function PaymentInfoTile({ info }: Props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.categoryContainer}>
-        <Image source={paymentCategoryMap.Food} style={styles.categoryImage} />
-      </View>
+    <SwipeableTile
+      onDelete={() => {
+        console.log("delete");
+      }}
+      onEdit={() => {
+        console.log("edit");
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.categoryContainer}>
+          <Image
+            source={paymentCategoryMap.Food}
+            style={styles.categoryImage}
+          />
+        </View>
 
-      <View style={styles.infoContainer}>
-        <View style={styles.paymentTitleContainer}>
-          <Text style={styles.paymentCategory}>{info.category}</Text>
-          {info.merchant && (
-            <Text style={styles.paymentMerchant}> - {info.merchant}</Text>
-          )}
+        <View style={styles.infoContainer}>
+          <View style={styles.paymentTitleContainer}>
+            <Text style={styles.paymentCategory}>{info.category}</Text>
+            {info.merchant && (
+              <Text style={styles.paymentMerchant}> - {info.merchant}</Text>
+            )}
+          </View>
+          <View style={styles.paymentDateContainer}>
+            <Text style={styles.paymentDate}>
+              {info.date.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </Text>
+          </View>
         </View>
-        <View style={styles.paymentDateContainer}>
-          <Text style={styles.paymentDate}>
-            {info.date.toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </Text>
+        <View style={styles.amountContainer}>
+          <Text style={styles.amount}>- ₹{info.amount}</Text>
         </View>
       </View>
-      <View style={styles.amountContainer}>
-        <Text style={styles.amount}>- ₹{info.amount}</Text>
-      </View>
-    </View>
+    </SwipeableTile>
   );
 }
 
