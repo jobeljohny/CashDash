@@ -1,15 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import AppBackground from "../Components/AppBackground";
 import MonthsCarousel from "../Components/MonthsCarousel";
 import PageHeader from "../Components/PageHeader";
 import PaymentInfoTile from "../Components/PaymentInfoTile";
-import { db, getExpensesByMonth } from "../Services/DbManager";
+import { AddPaymentNavigationProp } from "../Constants/NavigationProps";
 import { IPaymentInfo } from "../Interfaces/payment";
+import { db, getExpensesByMonth } from "../Services/DbManager";
 
 export default function ViewPayments() {
   const [payments, setPayments] = useState<IPaymentInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation<AddPaymentNavigationProp>();
 
   // Initial load for current month
   useEffect(() => {
@@ -24,6 +27,7 @@ export default function ViewPayments() {
 
       // Transform database records to IPaymentInfo format
       const formattedRecords = records.map((record) => ({
+        id: record.id,
         amount: record.amount,
         date: new Date(record.date),
         transactionType: record.transactionType,
@@ -43,8 +47,27 @@ export default function ViewPayments() {
     fetchPaymentsByMonth(year, month);
   };
 
+  const handleDelete = (payment: IPaymentInfo) => {
+    console.log("Payment to delete:", payment);
+    // Here you would call your delete function from DbManager
+    // After successful deletion, refresh the payments list
+  };
+
+  const handleEdit = (payment: IPaymentInfo) => {
+    console.log("Payment to edit:", payment);
+    // Convert Date object to string for navigation
+    const serializedPayment = {
+      ...payment,
+      date: payment.date.toISOString(),
+    };
+    navigation.navigate("AddPayment", {
+      payment: serializedPayment,
+      isEdit: true,
+    });
+  };
+
   const renderPaymentItem = ({ item }: { item: IPaymentInfo }) => (
-    <PaymentInfoTile info={item} />
+    <PaymentInfoTile info={item} onDelete={handleDelete} onEdit={handleEdit} />
   );
 
   return (
@@ -67,9 +90,7 @@ export default function ViewPayments() {
           <FlatList
             data={payments}
             renderItem={renderPaymentItem}
-            keyExtractor={(item, index) =>
-              `payment-${index}-${item.date.toISOString()}`
-            }
+            keyExtractor={(item) => `payment-${item.id}`}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listContainer}
           />

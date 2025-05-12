@@ -9,21 +9,26 @@ import FormDatePicker from "./Forms/FormDatePicker";
 
 interface Props {
   onSubmit: (info: IPaymentInfo) => void;
+  payment?: IPaymentInfo;
 }
 
-//some import issue was there. couldn't test
-const PaymentInfoForm: React.FC<Props> = ({ onSubmit }) => {
+const PaymentInfoForm: React.FC<Props> = ({ onSubmit, payment }) => {
   return (
     <Formik
       initialValues={{
-        amount: 0,
-        date: new Date(),
-        transactionType: paymentModes[0],
-        category: category[0],
-        merchant: "",
+        id: payment?.id,
+        amount: payment?.amount || 0,
+        date: payment?.date || new Date(),
+        transactionType: payment?.transactionType || paymentModes[0],
+        category: payment?.category || category[0],
+        merchant: payment?.merchant || "",
       }}
-      onSubmit={(values) => onSubmit(values)}
+      onSubmit={(values) => {
+        console.log("Submitting form with values:", values);
+        onSubmit(values as IPaymentInfo);
+      }}
       validationSchema={AddPaymentValidationSchema}
+      enableReinitialize={true}
     >
       {({ values }) => (
         <>
@@ -76,7 +81,7 @@ const PaymentInfoForm: React.FC<Props> = ({ onSubmit }) => {
               changeVariable="merchant"
             />
 
-            <FormSubmitButton title="SUBMIT"></FormSubmitButton>
+            <FormSubmitButton title={payment ? "UPDATE" : "SUBMIT"} />
           </View>
         </>
       )}

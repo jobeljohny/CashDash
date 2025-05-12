@@ -20,7 +20,8 @@ const FormPicker: React.FC<Props> = ({
   floatingLabel,
   changeVariable,
 }) => {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, values } = useFormikContext();
+  const currentValue = values[changeVariable as keyof typeof values];
 
   return (
     <View style={styles.container}>
@@ -28,6 +29,7 @@ const FormPicker: React.FC<Props> = ({
       <PickerInput
         icon={icon}
         items={items}
+        selectedValue={currentValue}
         onValueChange={(value) => setFieldValue(changeVariable, value)}
       />
     </View>

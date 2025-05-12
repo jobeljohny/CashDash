@@ -1,32 +1,34 @@
 import "react-native-gesture-handler";
 
-import { SQLiteProvider } from "expo-sqlite";
-import React, { Suspense, useRef } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import * as schema from "./db/schema";
-import AddPayment from "./Screens/AddPayment";
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import ViewPayments from "./Screens/ViewPayments";
-import { DATABASE_NAME, db } from "./Services/DbManager";
-import DebugScreen from "./Screens/DebugScreen";
-import HomeScreen from "./Screens/HomeScreen";
 import {
   NavigationContainer,
   NavigationContainerRef,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import { SQLiteProvider } from "expo-sqlite";
+import React, { Suspense, useRef } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { IPaymentInfoSerialized } from "./Interfaces/payment";
+import AddPayment from "./Screens/AddPayment";
+import DebugScreen from "./Screens/DebugScreen";
+import ViewPayments from "./Screens/ViewPayments";
+import { DATABASE_NAME, db } from "./Services/DbManager";
 
 // Define the type for stack navigator
 export type RootStackParamList = {
   ViewPayments: undefined;
   DebugScreen: undefined;
-  AddPayment: undefined;
+  AddPayment: {
+    payment?: IPaymentInfoSerialized;
+    isEdit?: boolean;
+  };
 };
 
 // Create the stack navigator

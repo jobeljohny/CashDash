@@ -5,16 +5,18 @@ import SwipeableTile from "./SwipeableTile";
 
 interface Props {
   info: IPaymentInfo;
+  onDelete?: (payment: IPaymentInfo) => void;
+  onEdit?: (payment: IPaymentInfo) => void;
 }
 
-export default function PaymentInfoTile({ info }: Props) {
+export default function PaymentInfoTile({ info, onDelete, onEdit }: Props) {
   return (
     <SwipeableTile
       onDelete={() => {
-        console.log("delete");
+        if (onDelete) onDelete(info);
       }}
       onEdit={() => {
-        console.log("edit");
+        if (onEdit) onEdit(info);
       }}
     >
       <View style={styles.container}>

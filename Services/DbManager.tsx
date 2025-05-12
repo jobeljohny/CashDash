@@ -6,6 +6,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { openDatabaseSync } from "expo-sqlite";
 import * as schema from "../db/schema";
 import migrations from "../drizzle/migrations";
+import { eq } from "drizzle-orm";
 
 type DBSchema = ExpoSQLiteDatabase<typeof import("../db/schema")>;
 
@@ -32,6 +33,28 @@ export const addExpense = async (db: DBSchema, expense: IPaymentInfo) => {
     return record;
   } catch (error) {
     console.error("Failed to add expense:", error);
+    throw error;
+  }
+};
+
+export const updateExpense = async (db: DBSchema, expense: IPaymentInfo) => {
+  try {
+    const record = await db
+      .update(expenses)
+      .set({
+        amount: expense.amount,
+        date: expense.date.toISOString(),
+        transactionType: expense.transactionType,
+        category: expense.category,
+        merchant: expense.merchant,
+      } as typeof expenses.$inferInsert)
+      .where(eq(expenses.id, expense.id))
+      .returning();
+
+    console.log("Record updated:", record);
+    return record;
+  } catch (error) {
+    console.error("Failed to update expense:", error);
     throw error;
   }
 };

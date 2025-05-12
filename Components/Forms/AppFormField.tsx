@@ -16,7 +16,16 @@ const AppFormField: React.FC<Props> = ({
   floatingLabel,
   ...otherProps
 }) => {
-  const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
+  const { setFieldTouched, handleChange, errors, touched, values } =
+    useFormikContext();
+  const currentValue = values[name as keyof typeof values];
+
+  // Convert current value to string if it exists
+  const valueAsString =
+    currentValue !== undefined && currentValue !== null && currentValue !== 0
+      ? String(currentValue)
+      : undefined;
+
   return (
     <>
       <View style={styles.container}>
@@ -24,6 +33,7 @@ const AppFormField: React.FC<Props> = ({
         <FormInput
           onBlur={() => setFieldTouched(name)}
           onChangeText={handleChange(name)}
+          value={valueAsString}
           {...otherProps}
         />
       </View>

@@ -8,9 +8,15 @@ type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 interface Props extends PickerProps {
   icon: IconName;
   items: string[];
+  selectedValue?: string;
 }
 
-const PickerInput: React.FC<Props> = ({ icon, items, ...otherProps }) => {
+const PickerInput: React.FC<Props> = ({
+  icon,
+  items,
+  selectedValue,
+  ...otherProps
+}) => {
   return (
     <View style={styles.container}>
       <MaterialCommunityIcons
@@ -22,7 +28,7 @@ const PickerInput: React.FC<Props> = ({ icon, items, ...otherProps }) => {
       <Picker
         mode="dropdown"
         style={styles.picker}
-        selectedValue={items[0]}
+        selectedValue={selectedValue || items[0]}
         dropdownIconColor="grey"
         {...otherProps}
       >

@@ -4,5 +4,14 @@ export interface IPaymentInfo {
   date: Date;
   transactionType: string;
   category: string;
-  merchant: string;
+  merchant?: string;
+}
+
+export interface IPaymentInfoSerialized {
+  id?: number;
+  amount: number;
+  date: string;
+  transactionType: string;
+  category: string;
+  merchant?: string;
 }
