@@ -59,6 +59,17 @@ export const updateExpense = async (db: DBSchema, expense: IPaymentInfo) => {
   }
 };
 
+export const deleteExpense = async (db: DBSchema, id: number) => {
+  try {
+    const record = await db.delete(expenses).where(eq(expenses.id, id));
+    console.log("Record deleted:", record);
+    return record;
+  } catch (error) {
+    console.error("Failed to delete expense:", error);
+    throw error;
+  }
+};
+
 export const getAllRecords = async (db: DBSchema) => {
   try {
     const initialized = await AsyncStorage.getItem("dbInitialized");

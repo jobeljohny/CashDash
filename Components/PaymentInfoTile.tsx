@@ -22,7 +22,7 @@ export default function PaymentInfoTile({ info, onDelete, onEdit }: Props) {
       <View style={styles.container}>
         <View style={styles.categoryContainer}>
           <Image
-            source={paymentCategoryMap.Food}
+            source={paymentCategoryMap[info.category]}
             style={styles.categoryImage}
           />
         </View>

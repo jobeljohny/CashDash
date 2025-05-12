@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
 import AppBackground from "../Components/AppBackground";
 import MonthsCarousel from "../Components/MonthsCarousel";
 import PageHeader from "../Components/PageHeader";
 import PaymentInfoTile from "../Components/PaymentInfoTile";
 import { AddPaymentNavigationProp } from "../Constants/NavigationProps";
 import { IPaymentInfo } from "../Interfaces/payment";
-import { db, getExpensesByMonth } from "../Services/DbManager";
+import { db, getExpensesByMonth, deleteExpense } from "../Services/DbManager";
 
 export default function ViewPayments() {
   const [payments, setPayments] = useState<IPaymentInfo[]>([]);
@@ -47,10 +47,16 @@ export default function ViewPayments() {
     fetchPaymentsByMonth(year, month);
   };
 
-  const handleDelete = (payment: IPaymentInfo) => {
-    console.log("Payment to delete:", payment);
-    // Here you would call your delete function from DbManager
-    // After successful deletion, refresh the payments list
+  const handleDelete = async (payment: IPaymentInfo) => {
+    try {
+      await deleteExpense(db, payment.id);
+      // Refresh payments list after deletion
+      // Use the date from the deleted payment to refresh the correct month view
+      fetchPaymentsByMonth(payment.date.getFullYear(), payment.date.getMonth());
+    } catch (error) {
+      console.error("Failed to delete payment:", error);
+      Alert.alert("Error", "Failed to delete payment");
+    }
   };
 
   const handleEdit = (payment: IPaymentInfo) => {
